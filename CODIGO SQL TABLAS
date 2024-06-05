@@ -1,0 +1,129 @@
+-- Creación de la tabla Estacion
+CREATE TABLE Estacion (
+    id_estacion INT PRIMARY KEY,
+    modelo VARCHAR(100),
+    fecha_compra DATE,
+    fecha_instalacion DATE,
+    nombre VARCHAR(100),
+    latitud FLOAT,
+    longitud FLOAT
+);
+
+-- Creación de la tabla Operario
+CREATE TABLE Operario (
+    id_operario INT PRIMARY KEY,
+    nombre VARCHAR(100)
+);
+
+-- Creación de la tabla Registro_Visita
+CREATE TABLE Registro_Visita (
+    id_visita INT PRIMARY KEY,
+    id_estacion INT,
+    id_operario INT,
+    hubo_hallazgo BOOLEAN,
+    fecha_visita DATE,
+    FOREIGN KEY (id_estacion) REFERENCES Estacion(id_estacion),
+    FOREIGN KEY (id_operario) REFERENCES Operario(id_operario)
+);
+
+-- Creación de la tabla Contaminante
+CREATE TABLE Contaminante (
+    id_contaminante INT PRIMARY KEY,
+    nombre VARCHAR(100)
+);
+
+-- Creación de la tabla Medicion
+CREATE TABLE Medicion (
+    id_medicion INT PRIMARY KEY,
+    id_estacion INT,
+    id_contaminante INT,
+    valor FLOAT,
+    fecha_hora DATETIME,
+    FOREIGN KEY (id_estacion) REFERENCES Estacion(id_estacion),
+    FOREIGN KEY (id_contaminante) REFERENCES Contaminante(id_contaminante)
+);
+
+-- Creación de la tabla Variable_Meteorologica
+CREATE TABLE Variable_Meteorologica (
+    id_variable INT PRIMARY KEY,
+    nombre VARCHAR(100)
+);
+
+-- Creación de la tabla Medicion_Meteorologica
+CREATE TABLE Medicion_Meteorologica (
+    id_medicion_meteorologica INT PRIMARY KEY,
+    id_estacion INT,
+    id_variable INT,
+    valor FLOAT,
+    fecha_hora DATETIME,
+    FOREIGN KEY (id_estacion) REFERENCES Estacion(id_estacion),
+    FOREIGN KEY (id_variable) REFERENCES Variable_Meteorologica(id_variable)
+);
+
+-- Inserción de operarios inventados
+INSERT INTO Operario (id_operario, nombre)
+VALUES
+    (1, 'Xavier López'),
+    (2, 'Daniel Arteaga'),
+    (3, 'kevin Toro'),
+    (4, 'luis fernando'),
+    (5, 'Carlos Sánchez');
+    
+    -- Inserción de estaciones inventadas
+INSERT INTO Estacion (id_estacion, modelo, fecha_compra, fecha_instalacion, nombre, latitud, longitud)
+VALUES
+    (1, 'Estación 1', '2022-01-15', '2022-01-20', 'valle de lili', 1.2, -7),
+    (2, 'Estación 2', '2015-11-20', '2015-11-22', 'caney', 2.2, -8),
+    (3, 'Estación 3', '2021-03-05', '2021-04-20', ' bochalema ', 3.3, -9),
+    (4, 'Estación 4', '2018-09-10', '2018-10-01', 'hacienda', 4.4, -5),
+    (5, 'Estación 5', '2017-12-18', '2018-01-05', 'brisas', 5.5, -4);
+
+-- Inserción de contaminantes 
+INSERT INTO Contaminante (id_contaminante, nombre)
+VALUES
+    (1, 'PM2.5'),
+    (2, 'PM10'),
+    (3, 'Ozono (O3)'),
+    (4, 'Ácido sulfúrico (H2S)');
+
+-- Inserción de variables meteorológicas 
+INSERT INTO Variable_Meteorologica (id_variable, nombre)
+VALUES
+    (1, 'Temperatura'),
+    (2, 'Velocidad del viento'),
+    (3, 'Dirección del viento'),
+    (4, 'Lluvia'),
+    (5, 'Radiación solar');
+    
+    
+-- Insertar visitas
+INSERT INTO Registro_Visita (id_visita, id_estacion, id_operario, hubo_hallazgo, fecha_visita)
+VALUES
+    (1, 1, 1, true, '2023-05-01'),
+    (2, 1, 2, false, '2023-05-02'),
+    (3, 1, 1, true, '2023-05-03'),
+    (4, 1, 2, false, '2023-05-04'),
+    (5, 1, 1, false, '2023-05-05');
+    
+ -- Insertar mediciones de contaminantes
+INSERT INTO Medicion (id_medicion, id_estacion, id_contaminante, valor, fecha_hora)
+VALUES
+    (1, 1, 1, 15.2, '2023-05-01 08:00:00'),
+    (2, 2, 2, 25.5, '2023-05-01 09:00:00'),
+    (3, 3, 3, 0.03, '2023-05-01 10:00:00'),
+    (4, 4, 4, 0.02, '2023-05-01 11:00:00'),
+    (5, 5, 1, 18.7, '2023-05-01 12:00:00');
+   
+-- Insertar mediciones de variables meteorológicas
+INSERT INTO Medicion_Meteorologica (id_medicion_meteorologica, id_estacion, id_variable, valor, fecha_hora)
+VALUES
+    (1, 1, 1, 24.5, '2023-05-01 08:00:00'),
+    (2, 2, 2, 5.3, '2023-05-01 09:00:00'),
+    (3, 3, 3, 270, '2023-05-01 10:00:00'),
+    (4, 4, 4, 0.1, '2023-05-01 11:00:00'),
+    (5, 5, 5, 800, '2023-05-01 12:00:00');
+-- Verificar mediciones de contaminantes
+SELECT * FROM Medicion;
+
+-- Verificar mediciones de variables meteorológicas
+SELECT * FROM Medicion_Meteorologica;
